@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { ResizableHandle, ResizablePanel } from "../ui/resizable";
+import { ResizablePanel } from "../ui/resizable";
 import { Separator } from "../ui/separator";
 import { cn } from "@/lib/utils";
 import {
@@ -10,14 +10,19 @@ import {
   File,
   Inbox,
   MessagesSquare,
+  Moon,
   Send,
   ShoppingCart,
+  Sun,
   Trash2,
   Users2,
 } from "lucide-react";
 import { Nav } from "./nav-dep";
+import { useTheme } from "next-themes";
+import ThemeButton from "./theme-button";
 
 export default function LayoutNav() {
+  const { theme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <>
@@ -128,6 +133,7 @@ export default function LayoutNav() {
             },
           ]}
         />
+        <ThemeButton isCollapsed={isCollapsed} />
       </ResizablePanel>
     </>
   );

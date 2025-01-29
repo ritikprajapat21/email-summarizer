@@ -8,6 +8,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import LayoutNav from "@/components/custom/nav";
+import { ThemeProvider } from "@/components/custom/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,20 +31,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <TooltipProvider>
-          <ResizablePanelGroup
-            direction="horizontal"
-            className="h-fit max-h-full flex-1 items-stretch"
-          >
-            <LayoutNav />
-            <ResizableHandle withHandle />
+          <ThemeProvider>
+            <ResizablePanelGroup
+              direction="horizontal"
+              className="h-fit max-h-full flex-1 items-stretch"
+            >
+              <LayoutNav />
+              <ResizableHandle withHandle />
 
-            <ResizablePanel>{children}</ResizablePanel>
-          </ResizablePanelGroup>
+              <ResizablePanel defaultSize={85}>{children}</ResizablePanel>
+            </ResizablePanelGroup>
+          </ThemeProvider>
         </TooltipProvider>
       </body>
     </html>

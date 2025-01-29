@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
 import { Mail } from "../data";
-import { useMail } from "@/hooks/use-mail";
 import Link from "next/link";
 
 interface MailListProps {
@@ -13,10 +12,6 @@ interface MailListProps {
 }
 
 export function MailList({ items }: MailListProps) {
-  //const [mail, setMail] = useMail();
-  const mailId = useMail((state) => state.mailId);
-  const setMailId = useMail((state) => state.setMailId);
-
   return (
     <ScrollArea className="h-[calc(100vh-7.625rem)]">
       <div className="flex flex-col gap-2 p-4 pt-0">
@@ -26,15 +21,7 @@ export function MailList({ items }: MailListProps) {
             href={`/${item.id}`}
             className={cn(
               "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-              mailId === item.id && "bg-muted",
             )}
-            onClick={
-              () => setMailId(item.id)
-              //setMail({
-              //  ...mail,
-              //  selected: item.id,
-              //})
-            }
           >
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
@@ -44,14 +31,7 @@ export function MailList({ items }: MailListProps) {
                     <span className="flex h-2 w-2 rounded-full bg-blue-600" />
                   )}
                 </div>
-                <div
-                  className={cn(
-                    "ml-auto text-xs",
-                    mailId === item.id
-                      ? "text-foreground"
-                      : "text-muted-foreground",
-                  )}
-                >
+                <div className={cn("ml-auto text-xs text-muted-foreground")}>
                   {formatDistanceToNow(new Date(item.date), {
                     addSuffix: true,
                   })}
@@ -59,8 +39,8 @@ export function MailList({ items }: MailListProps) {
               </div>
               <div className="text-xs font-medium">{item.subject}</div>
             </div>
-            <div className="line-clamp-2 text-xs text-muted-foreground">
-              {item.text.substring(0, 300)}
+            <div className="line-clamp-2 text-xs text-muted-foreground overflow-hidden text-ellipsis">
+              {item.text}
             </div>
             {item.labels.length ? (
               <div className="flex items-center gap-2">
