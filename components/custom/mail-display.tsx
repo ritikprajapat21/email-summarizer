@@ -31,6 +31,9 @@ interface MailDisplayProps {
 }
 
 export function MailDisplay({ mail }: MailDisplayProps) {
+  if (!mail) {
+    return <div>Mail not found</div>;
+  }
   const today = new Date();
 
   return (
@@ -201,7 +204,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
             {mail.text}
           </div>
           <Separator className="mt-auto" />
-          <div className="p-4 flex-1">
+          <div className="p-4 flex-1 h-fit">
             <form>
               <div className="grid gap-4">
                 <Textarea

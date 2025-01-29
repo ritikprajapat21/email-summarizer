@@ -1,15 +1,15 @@
-import { atom, useAtom } from "jotai";
+import { create } from "zustand";
 
 import { Mail, mails } from "@/components/data";
 
 type Config = {
-  selected: Mail["id"] | null;
+  mailId: string;
+  mails: Mail[];
+  setMailId: (id: string) => void;
 };
 
-const configAtom = atom<Config>({
-  selected: mails[0].id,
-});
-
-export function useMail() {
-  return useAtom(configAtom);
-}
+export const useMail = create<Config>((set) => ({
+  mailId: "0",
+  mails: mails,
+  setMailId: (id: string) => set((state) => ({ ...state, mailId: id })),
+}));

@@ -6,29 +6,34 @@ import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
 import { Mail } from "../data";
 import { useMail } from "@/hooks/use-mail";
+import Link from "next/link";
 
 interface MailListProps {
   items: Mail[];
 }
 
 export function MailList({ items }: MailListProps) {
-  const [mail, setMail] = useMail();
+  //const [mail, setMail] = useMail();
+  const mailId = useMail((state) => state.mailId);
+  const setMailId = useMail((state) => state.setMailId);
 
   return (
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
         {items.map((item) => (
-          <button
+          <Link
             key={item.id}
+            href={`/${item.id}`}
             className={cn(
               "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
-              mail.selected === item.id && "bg-muted",
+              mailId === item.id && "bg-muted",
             )}
-            onClick={() =>
-              setMail({
-                ...mail,
-                selected: item.id,
-              })
+            onClick={
+              () => setMailId(item.id)
+              //setMail({
+              //  ...mail,
+              //  selected: item.id,
+              //})
             }
           >
             <div className="flex w-full flex-col gap-1">
@@ -42,7 +47,7 @@ export function MailList({ items }: MailListProps) {
                 <div
                   className={cn(
                     "ml-auto text-xs",
-                    mail.selected === item.id
+                    mailId === item.id
                       ? "text-foreground"
                       : "text-muted-foreground",
                   )}
@@ -66,7 +71,7 @@ export function MailList({ items }: MailListProps) {
                 ))}
               </div>
             ) : null}
-          </button>
+          </Link>
         ))}
       </div>
     </ScrollArea>

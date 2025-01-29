@@ -24,7 +24,6 @@ import {
 } from "../ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { TooltipProvider } from "../ui/tooltip";
-//import { AccountSwitcher } from "@/app/(app)/examples/mail/components/account-switcher";
 import { MailDisplay } from "./mail-display";
 import { MailList } from "./mail-list";
 import { Nav } from "./nav";
@@ -33,11 +32,6 @@ import { useMail } from "@/hooks/use-mail";
 import { Separator } from "../ui/separator";
 
 interface MailProps {
-  //accounts: {
-  //  label: string;
-  //  email: string;
-  //  icon: React.ReactNode;
-  //}[];
   mails: Mail[];
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
@@ -45,25 +39,25 @@ interface MailProps {
 }
 
 export function Mail({
-  //accounts,
   mails,
   defaultLayout = [20, 32, 48],
   defaultCollapsed = false,
   navCollapsedSize,
 }: MailProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [mail] = useMail(;
+  //const [mail] = useMail();
+  const mailId = useMail((state) => state.mailId);
 
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup
         direction="horizontal"
-        onLayout={(sizes: number[]) => {
-          document.cookie = `react-resizable-panels:layout:mail=${JSON.stringify(
-            sizes,
-          )}`;
-        }}
-        className="h-fit max-h-[800px] items-stretch"
+        //onLayout={(sizes: number[]) => {
+        //  document.cookie = `react-resizable-panels:layout:mail=${JSON.stringify(
+        //    sizes,
+        //  )}`;
+        //}}
+        className="h-fit max-h-full flex-1 items-stretch"
       >
         <ResizablePanel
           defaultSize={defaultLayout[0]}
@@ -215,7 +209,7 @@ export function Mail({
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[2]} minSize={30}>
           <MailDisplay
-            mail={mails.find((item) => item.id === mail.selected) || null}
+            mail={mails.find((item) => item.id === mailId) || null}
           />
         </ResizablePanel>
       </ResizablePanelGroup>
