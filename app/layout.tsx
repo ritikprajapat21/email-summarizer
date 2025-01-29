@@ -7,7 +7,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import LayoutNav from "@/components/custom/layout-nav";
+import LayoutNav from "@/components/custom/nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,11 +37,6 @@ export default function RootLayout({
         <TooltipProvider>
           <ResizablePanelGroup
             direction="horizontal"
-            //onLayout={(sizes: number[]) => {
-            //  document.cookie = `react-resizable-panels:layout:mail=${JSON.stringify(
-            //    sizes,
-            //  )}`;
-            //}}
             className="h-fit max-h-full flex-1 items-stretch"
           >
             <LayoutNav />

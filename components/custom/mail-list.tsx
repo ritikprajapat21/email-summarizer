@@ -18,7 +18,7 @@ export function MailList({ items }: MailListProps) {
   const setMailId = useMail((state) => state.setMailId);
 
   return (
-    <ScrollArea className="h-screen">
+    <ScrollArea className="h-[calc(100vh-7.625rem)]">
       <div className="flex flex-col gap-2 p-4 pt-0">
         {items.map((item) => (
           <Link
