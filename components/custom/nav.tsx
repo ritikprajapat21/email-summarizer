@@ -10,19 +10,15 @@ import {
   File,
   Inbox,
   MessagesSquare,
-  Moon,
   Send,
   ShoppingCart,
-  Sun,
   Trash2,
   Users2,
 } from "lucide-react";
 import { Nav } from "./nav-dep";
-import { useTheme } from "next-themes";
 import ThemeButton from "./theme-button";
 
 export default function LayoutNav() {
-  const { theme } = useTheme();
   const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <>
@@ -133,7 +129,9 @@ export default function LayoutNav() {
             },
           ]}
         />
-        <ThemeButton isCollapsed={isCollapsed} />
+        <div className="flex justify-start px-2 mx-1">
+          <ThemeButton isCollapsed={isCollapsed} />
+        </div>
       </ResizablePanel>
     </>
   );

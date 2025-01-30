@@ -1,14 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import LayoutNav from "@/components/custom/nav";
-import { ThemeProvider } from "@/components/custom/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,19 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TooltipProvider>
-          <ThemeProvider>
-            <ResizablePanelGroup
-              direction="horizontal"
-              className="h-fit max-h-full flex-1 items-stretch"
-            >
-              <LayoutNav />
-              <ResizableHandle withHandle />
-
-              <ResizablePanel defaultSize={85}>{children}</ResizablePanel>
-            </ResizablePanelGroup>
-          </ThemeProvider>
-        </TooltipProvider>
+        {children}
       </body>
     </html>
   );

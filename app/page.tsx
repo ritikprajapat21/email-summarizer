@@ -1,5 +1,3 @@
-import Mail from "@/components/custom/mail";
-
 export default function Home() {
-  return <Mail />;
+  return <div>You should see login page</div>;
 }
