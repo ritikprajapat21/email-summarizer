@@ -37,7 +37,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
   const today = new Date();
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex min-h-screen flex-col">
       <div className="flex items-center p-2">
         <div className="flex items-center gap-2">
           <Tooltip>

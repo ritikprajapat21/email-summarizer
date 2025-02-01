@@ -18,7 +18,7 @@ export function MailList({ items }: MailListProps) {
         {items.map((item) => (
           <Link
             key={item.id}
-            href={`/${item.id}`}
+            href={`/mails/${item.id}`}
             className={cn(
               "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
             )}
