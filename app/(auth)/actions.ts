@@ -32,10 +32,9 @@ export async function login(previousState: any, formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    return { ...previousState, error: error.message };
+    return { ...previousState, error: { supabase: error.message } };
   }
 
-  //revalidatePath("/mails", "layout");
   redirect("/mails");
 }
 
@@ -63,10 +62,9 @@ export async function signup(previousState: any, formData: FormData) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    return { ...previousState, error: error.message };
+    return { ...previousState, error: { supabase: error.message } };
   }
 
-  //revalidatePath("/", "layout");
   redirect("/login");
 }
 
@@ -89,7 +87,7 @@ export async function forgotPassword(previousState: any, formData: FormData) {
   );
 
   if (error) {
-    return { ...previousState, error: error.message };
+    return { ...previousState, error: { supabase: error.message } };
   }
 
   //revalidatePath("/", "layout");

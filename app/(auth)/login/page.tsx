@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function LoginPage() {
   const [state, action, isPending] = useActionState(login, null);
-  const isString = typeof state?.error === "string";
+  console.log(state);
 
   return (
     <div className="flex justify-center items-center h-screen">

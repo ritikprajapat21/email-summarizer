@@ -4,7 +4,6 @@ import { updateSession } from "@/lib/supabase/middleware";
 export async function middleware(request: NextRequest) {
   console.log("Url:", request.nextUrl.pathname);
   return await updateSession(request);
-  //return NextResponse.next();
 }
 
 export const config = {
@@ -18,6 +17,6 @@ export const config = {
      */
     //"/((?!_next/static|_next/image|favicon.ico).*)",
     "/mails",
-    "/mails/:id*",
+    "/mails/:id",
   ],
 };
