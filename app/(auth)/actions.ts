@@ -1,10 +1,13 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
-import { signInSchema } from "@/lib/zod/schema";
+import {
+  forgotPasswordSchema,
+  signInSchema,
+  signUpSchema,
+} from "@/lib/zod/schema";
 
 export async function login(previousState: any, formData: FormData) {
   const result = signInSchema.safeParse({
@@ -21,8 +24,6 @@ export async function login(previousState: any, formData: FormData) {
 
   const supabase = await createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: result.data.email,
     password: result.data.password,
@@ -30,17 +31,17 @@ export async function login(previousState: any, formData: FormData) {
 
   const { error } = await supabase.auth.signInWithPassword(data);
 
-  console.log(error);
   if (error) {
-    redirect("/error");
+    return { ...previousState, error: error.message };
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  //revalidatePath("/mails", "layout");
+  redirect("/mails");
 }
 
 export async function signup(previousState: any, formData: FormData) {
-  const result = signInSchema.safeParse({
+  const result = signUpSchema.safeParse({
+    name: formData.get("name") as string,
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   });
@@ -62,15 +63,15 @@ export async function signup(previousState: any, formData: FormData) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    redirect("/error");
+    return { ...previousState, error: error.message };
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  //revalidatePath("/", "layout");
+  redirect("/login");
 }
 
-export async function forgetPassword(previousState: any, formData: FormData) {
-  const result = signInSchema.safeParse({
+export async function forgotPassword(previousState: any, formData: FormData) {
+  const result = forgotPasswordSchema.safeParse({
     email: formData.get("email") as string,
   });
 
@@ -88,9 +89,9 @@ export async function forgetPassword(previousState: any, formData: FormData) {
   );
 
   if (error) {
-    redirect("/error");
+    return { ...previousState, error: error.message };
   }
 
-  revalidatePath("/", "layout");
-  redirect("/");
+  //revalidatePath("/", "layout");
+  redirect("/login?emailSent=true");
 }
