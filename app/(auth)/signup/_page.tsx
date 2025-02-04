@@ -1,73 +1,57 @@
 "use client";
 import { useActionState } from "react";
-import { login } from "../actions";
+import { signup } from "../actions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 import ZodError from "@/components/custom/zod-error";
-import { createClient } from "@/lib/supabase/client";
 
-export default function LoginPage() {
-  const [state, action, isPending] = useActionState(login, null);
-
-  const oauthClick = async () => {
-    const supabase = createClient();
-
-    const res = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "http://localhost:3000/auth/callback",
-      },
-    });
-    console.log(res);
-  };
+export default function SignupPage() {
+  const [state, action, isPending] = useActionState(signup, null);
 
   return (
     <div className="flex justify-center items-center h-screen">
       <Card className="w-10/12 max-w-lg mx-auto">
         <CardHeader>
           <CardTitle>
-            <h2 className="text-2xl font-bold">Log in</h2>
+            <h2 className="text-2xl font-bold">Sign Up</h2>
           </CardTitle>
           <p className="text-sm">
-            Don't have an account?{" "}
-            <Link href="/signup" className="underline">
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
               Click Here
             </Link>
           </p>
         </CardHeader>
         <CardContent>
-          <div>
-            <Button onClick={oauthClick}>Google</Button>
-          </div>
           <form
             className="max-w-xl mx-auto flex flex-col gap-4"
             action={action}
           >
+            <div>
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" name="name" type="text" required />
+              <ZodError error={state?.error?.name} />
+            </div>
             <div>
               <Label htmlFor="email">Email</Label>
               <Input id="email" name="email" type="email" required />
               <ZodError error={state?.error?.email} />
             </div>
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <Label htmlFor="password">Password</Label>
-                <Link href="/forgot-password" className="text-xs underline">
-                  Forgot Password?
-                </Link>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input id="password" name="password" type="password" required />
               <ZodError error={state?.error?.password} />
             </div>
+            <ZodError error={state?.error?.supabase} />
             <Button
               className="w-fit mx-auto font-semibold"
               disabled={isPending}
             >
-              Log in
+              Sign Up
             </Button>
-            <ZodError error={state?.error?.supabase} />
           </form>
         </CardContent>
       </Card>
