@@ -14,8 +14,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           direction="horizontal"
           className="h-fit max-h-full flex-1 items-stretch"
         >
-          <LayoutNav />
-          <ResizableHandle withHandle />
+          {/*<LayoutNav />
+          <ResizableHandle withHandle />*/}
 
           <ResizablePanel defaultSize={85}>{children}</ResizablePanel>
         </ResizablePanelGroup>

@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 
 export default async function LoginPage() {
   const SCOPE = [
-    "https://www.googleapis.com/auth/gmail.metadata",
+    //"https://www.googleapis.com/auth/gmail.metadata",
     "https://www.googleapis.com/auth/gmail.readonly",
   ];
 
