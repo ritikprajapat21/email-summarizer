@@ -3,13 +3,14 @@ import { oauthClient } from "@/lib/auth";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 
-export default function LoginPage() {
+export default async function LoginPage() {
   const SCOPE = [
     "https://www.googleapis.com/auth/gmail.metadata",
     "https://www.googleapis.com/auth/gmail.readonly",
   ];
 
-  const authUrl = oauthClient.generateAuthUrl({
+  const oauth = await oauthClient();
+  const authUrl = oauth.generateAuthUrl({
     access_type: "offline",
     scope: SCOPE,
   });

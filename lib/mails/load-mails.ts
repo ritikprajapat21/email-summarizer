@@ -7,11 +7,12 @@ export async function loadMails() {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token");
 
-  oauthClient.setCredentials({ access_token: accessToken?.value });
+  const oauth = await oauthClient();
+  oauth.setCredentials({ access_token: accessToken?.value });
 
   try {
     const res = await gmail.users.messages.list({
-      auth: oauthClient,
+      auth: oauth,
       userId: "me",
     });
 

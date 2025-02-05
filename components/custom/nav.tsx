@@ -20,9 +20,11 @@ import { Nav } from "./nav-dep";
 import ThemeButton from "./theme-button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { buttonVariants } from "../ui/button";
+import { logout } from "@/lib/auth";
 
 export default function LayoutNav() {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <>
       <ResizablePanel
@@ -54,7 +56,7 @@ export default function LayoutNav() {
             isCollapsed ? "h-[52px]" : "px-2",
           )}
         >
-          <div className="flex justify-center">
+          <div className="flex justify-center" onClick={logout}>
             {isCollapsed ? (
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>

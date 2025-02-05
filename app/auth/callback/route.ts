@@ -12,8 +12,10 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Google OAuth Error: " + error });
   }
 
+  const oauth = await oauthClient();
+
   try {
-    const { tokens } = await oauthClient.getToken(code);
+    const { tokens } = await oauth.getToken(code);
 
     const cookieStore = await cookies();
 

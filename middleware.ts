@@ -1,21 +1,23 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  console.log("Url:", request.nextUrl.pathname);
+  const accessToken = request.cookies.get("access_token")?.value || null;
+
+  const isPublicRoute =
+    request.nextUrl.pathname === "/" ||
+    request.nextUrl.pathname.startsWith("/login");
+
+  if (accessToken && isPublicRoute) {
+    return NextResponse.redirect(new URL("/mails", request.url));
+  }
+
+  if (!accessToken && !isPublicRoute) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - any other custom routes that should not trigger login redirection
-     */
-    //"/((?!_next/static|_next/image|favicon.ico).*)",
-    "/login",
-    "/mails",
-    "/mails/:id",
-  ],
+  matcher: ["/", "/mails", "/mails/:id", "/login"],
 };
