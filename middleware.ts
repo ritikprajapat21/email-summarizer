@@ -1,9 +1,7 @@
-import { type NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   console.log("Url:", request.nextUrl.pathname);
-  return await updateSession(request);
 }
 
 export const config = {
@@ -16,6 +14,7 @@ export const config = {
      * - any other custom routes that should not trigger login redirection
      */
     //"/((?!_next/static|_next/image|favicon.ico).*)",
+    "/login",
     "/mails",
     "/mails/:id",
   ],

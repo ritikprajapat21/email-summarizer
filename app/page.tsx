@@ -132,7 +132,7 @@ export default function Home() {
                   className="bg-gradient-to-r from-green-500 to-blue-500 text-white hover:from-green-600 hover:to-blue-600"
                   asChild
                 >
-                  <Link href="/signup">Get Started</Link>
+                  <Link href="/login">Get Started</Link>
                 </Button>
               </div>
             </Card>
@@ -182,7 +182,7 @@ export default function Home() {
                   className="bg-gradient-to-r from-green-500 to-blue-500 text-white hover:from-green-600 hover:to-blue-600"
                   asChild
                 >
-                  <Link href="/signup">Upgrade Now</Link>
+                  <Link href="/login">Upgrade Now</Link>
                 </Button>
               </div>
             </Card>
@@ -221,7 +221,7 @@ export default function Home() {
                   className="border border-blue-400 bg-gradient-to-r from-green-500 to-blue-500 text-white hover:from-green-600 hover:to-blue-600"
                   asChild
                 >
-                  <Link href="/signup">Start Free Trial</Link>
+                  <Link href="/login">Start Free Trial</Link>
                 </Button>
               </div>
             </Card>

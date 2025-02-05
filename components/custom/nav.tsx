@@ -9,6 +9,7 @@ import {
   ArchiveX,
   File,
   Inbox,
+  LogOut,
   MessagesSquare,
   Send,
   ShoppingCart,
@@ -17,6 +18,8 @@ import {
 } from "lucide-react";
 import { Nav } from "./nav-dep";
 import ThemeButton from "./theme-button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { buttonVariants } from "../ui/button";
 
 export default function LayoutNav() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -50,7 +53,41 @@ export default function LayoutNav() {
             "flex h-[52px] items-center justify-center",
             isCollapsed ? "h-[52px]" : "px-2",
           )}
-        ></div>
+        >
+          <div className="flex justify-center">
+            {isCollapsed ? (
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <div
+                    className={cn(
+                      buttonVariants({ variant: "ghost", size: "icon" }),
+                      "h-9 w-9",
+                    )}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span className="sr-only">Logout</span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="flex items-center gap-4"
+                >
+                  Logout
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <div
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "justify-start",
+                )}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </div>
+            )}
+          </div>
+        </div>
         <Separator />
         <Nav
           isCollapsed={isCollapsed}

@@ -1,5 +1,5 @@
 import Mail from "@/components/custom/mail";
 
-export default function Home() {
+export default async function Home() {
   return <Mail />;
 }
