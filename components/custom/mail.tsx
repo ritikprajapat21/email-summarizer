@@ -6,8 +6,19 @@ import { Input } from "../ui/input";
 import { useMail } from "@/hooks/use-mail";
 import { MailList } from "./mail-list";
 
-export default function Mail() {
-  const mails = useMail((state) => state.mails);
+interface Mail {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  text: string;
+  date: string;
+  read: boolean;
+  labels: string[];
+}
+
+export default function Mail({ mails }: { mails: Mail[] }) {
+  //const mails = useMail((state) => state.mails);
 
   return (
     <Tabs defaultValue="all">
