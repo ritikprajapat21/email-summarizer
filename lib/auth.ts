@@ -1,7 +1,7 @@
 "use server";
 import { google } from "googleapis";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const oauthClient = async () =>
   new google.auth.OAuth2({
@@ -14,5 +14,5 @@ export const logout = async () => {
   const cookieStore = await cookies();
   console.log("Logging out");
   cookieStore.set("access_token", "");
-  revalidatePath("/");
+  redirect("/");
 };
