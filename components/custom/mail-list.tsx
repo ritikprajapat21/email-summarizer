@@ -4,8 +4,8 @@ import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { ScrollArea } from "../ui/scroll-area";
-import { Mail } from "../data";
 import Link from "next/link";
+import { Mail } from "@/hooks/use-mail";
 
 interface MailListProps {
   items: Mail[];
@@ -39,7 +39,7 @@ export function MailList({ items }: MailListProps) {
               </div>
               <div className="text-xs font-medium">{item.subject}</div>
             </div>
-            <div className="line-clamp-2 text-xs text-muted-foreground overflow-hidden text-ellipsis">
+            <div className="text-wrap line-clamp-2 text-xs text-muted-foreground overflow-hidden text-ellipsis">
               {item.text}
             </div>
             {item.labels.length ? (

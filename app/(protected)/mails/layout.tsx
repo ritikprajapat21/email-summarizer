@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           {/*<LayoutNav />
           <ResizableHandle withHandle />*/}
 
-          <ResizablePanel defaultSize={85}>{children}</ResizablePanel>
+          <ResizablePanel>{children}</ResizablePanel>
         </ResizablePanelGroup>
       </TooltipProvider>
     </main>

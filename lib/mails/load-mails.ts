@@ -1,7 +1,7 @@
 "use server";
 import { google } from "googleapis";
 import { cookies } from "next/headers";
-import { oauthClient } from "../auth";
+import { logout, oauthClient } from "../auth";
 import { redirect } from "next/navigation";
 
 export async function loadMails() {
@@ -10,7 +10,7 @@ export async function loadMails() {
   const accessToken = cookieStore.get("access_token");
 
   if (!accessToken?.value) {
-    redirect("/");
+    logout();
   }
 
   const oauth = await oauthClient();
@@ -29,7 +29,7 @@ export async function loadMails() {
       !res.data.messages ||
       res.data.messages.length === 0
     ) {
-      return ""; // Return empty string if no messages
+      return []; // Return empty string if no messages
     }
 
     const messageIds = res.data.messages.map((message) => message.id); // Extract IDs
@@ -55,18 +55,23 @@ export async function loadMails() {
     const allMailContent = messageDetails.map(getMailDetails);
 
     return allMailContent;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching emails:", error);
-    return ""; // Return empty string on error
+    if (error?.code === 401) {
+      logout();
+    }
+    return []; // Return empty string on error
   }
 }
 
-function getMailDetails(messageDetail: { data: any }) {
+function getMailDetails(messageDetail: { data: any }, index: number) {
   if (!messageDetail || !messageDetail.data) {
     return ""; // Handle missing message details
   }
 
   const obj: any = {};
+
+  obj.id = messageDetail.data.id;
 
   if (messageDetail.data.labelIds) {
     obj.labels = messageDetail.data.labelIds;
@@ -88,8 +93,6 @@ function getMailDetails(messageDetail: { data: any }) {
         obj.email = header;
       }*/ else if (header.name === "Subject") {
           obj.subject = header.value;
-        } else if (header.name === "Message-ID") {
-          obj.id = header.value;
         }
       },
     );

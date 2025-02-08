@@ -7,6 +7,19 @@ import { useParams } from "next/navigation";
 export default function MailView() {
   const { id } = useParams();
   const mails = useMail((state) => state.mails);
+  console.log(
+    mails.filter((e) => {
+      return e.id === id;
+    }),
+  );
 
-  return <MailDisplay mail={mails.filter((e) => e.id === id)[0]} />;
+  return (
+    <MailDisplay
+      mail={
+        mails.filter((e) => {
+          return e.id === id;
+        })[0]
+      }
+    />
+  );
 }

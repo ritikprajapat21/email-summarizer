@@ -3,22 +3,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Separator } from "../ui/separator";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
-import { useMail } from "@/hooks/use-mail";
+import { useMail, Mail as MailType } from "@/hooks/use-mail";
 import { MailList } from "./mail-list";
+import { useEffect } from "react";
 
-interface Mail {
-  id: string;
-  name: string;
-  email: string;
-  subject: string;
-  text: string;
-  date: string;
-  read: boolean;
-  labels: string[];
-}
+export default function Mail({ mails }: { mails: MailType[] }) {
+  const setMails = useMail((state) => state.setMails);
 
-export default function Mail({ mails }: { mails: Mail[] }) {
-  //const mails = useMail((state) => state.mails);
+  useEffect(() => {
+    setMails(mails);
+  }, [mails]);
 
   return (
     <Tabs defaultValue="all">
