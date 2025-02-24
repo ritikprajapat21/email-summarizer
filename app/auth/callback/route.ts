@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: tokens.expiry_date || 1000 * 60 * 60,
+      maxAge: 1000 * 60 * 60,
     });
 
     return NextResponse.redirect(new URL("/mails", request.url));

@@ -9,6 +9,8 @@ export interface Mail {
   date: string;
   read: boolean;
   labels: string[];
+  summary: string;
+  tags: string[];
 }
 
 type Config = {

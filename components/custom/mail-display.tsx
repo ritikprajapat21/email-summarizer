@@ -180,9 +180,11 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                 <AvatarImage alt={mail.name} />
                 <AvatarFallback>
                   {mail.name
-                    .split(" ")
-                    .map((chunk) => chunk[0])
-                    .join("") || "Fallback string"}
+                    ? mail.name
+                      .split(" ")
+                      .map((chunk) => chunk[0])
+                      .join("")
+                    : "Fallback string"}
                 </AvatarFallback>
               </Avatar>
               <div className="grid gap-1">

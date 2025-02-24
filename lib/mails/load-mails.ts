@@ -2,7 +2,7 @@
 import { google } from "googleapis";
 import { cookies } from "next/headers";
 import { logout, oauthClient } from "../auth";
-import { redirect } from "next/navigation";
+import { summarizeEmail } from "../summary";
 
 export async function loadMails() {
   const gmail = google.gmail("v1");
@@ -52,21 +52,27 @@ export async function loadMails() {
     // headers[18] -> Message-ID => id
     // decodedBody => text
 
-    const allMailContent = messageDetails.map(getMailDetails);
+    const mailPromises = messageDetails.map((msgDetails) =>
+      getMailDetails(msgDetails),
+    );
 
+    const allMailContent = await Promise.all(mailPromises);
+
+    console.log(allMailContent);
     return allMailContent;
   } catch (error: any) {
     console.error("Error fetching emails:", error);
+    console.log(error.error);
     if (error?.code === 401) {
       logout();
     }
-    return []; // Return empty string on error
+    return [];
   }
 }
 
-function getMailDetails(messageDetail: { data: any }, index: number) {
+async function getMailDetails(messageDetail: { data: any }) {
   if (!messageDetail || !messageDetail.data) {
-    return ""; // Handle missing message details
+    return "";
   }
 
   const obj: any = {};
@@ -89,9 +95,7 @@ function getMailDetails(messageDetail: { data: any }, index: number) {
           obj.date = new Date(header.value).toISOString();
         } else if (header.name === "From") {
           obj.email = header.value;
-        } /*else if (header === 25) {
-        obj.email = header;
-      }*/ else if (header.name === "Subject") {
+        } else if (header.name === "Subject") {
           obj.subject = header.value;
         }
       },
@@ -102,26 +106,27 @@ function getMailDetails(messageDetail: { data: any }, index: number) {
   let decodedBody = "";
 
   if (messageData.payload && messageData.payload.parts) {
-    // Check if payload exists
     messageData.payload.parts.forEach((part) => {
-      if (part.mimeType === "text/plain") {
-        const data = part.body.data;
-        if (data) {
-          decodedBody += Buffer.from(data, "base64").toString();
-        }
+      //if (part.mimeType === "text/plain") {
+      const data = part.body.data;
+      if (data) {
+        decodedBody += Buffer.from(data, "base64").toString();
       }
+      //}
     });
   } else if (
     messageData.payload &&
     messageData.payload.body &&
     messageData.payload.body.data
   ) {
-    // Check if payload and body exists
     const data = messageData.payload.body.data;
     if (data) {
       decodedBody = Buffer.from(data, "base64").toString();
     }
   }
 
-  return { ...obj, text: decodedBody };
+  const summary = await summarizeEmail(decodedBody);
+  console.log(summary);
+
+  return { ...obj, text: decodedBody, ...summary };
 }

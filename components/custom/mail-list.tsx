@@ -23,8 +23,8 @@ export function MailList({ items }: MailListProps) {
               "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
             )}
           >
-            <div className="flex w-full flex-col gap-1">
-              <div className="flex items-center">
+            <div className="flex flex-col w-full gap-1">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="font-semibold">{item.name}</div>
                   {!item.read && (
@@ -37,13 +37,15 @@ export function MailList({ items }: MailListProps) {
                   })}
                 </div>
               </div>
-              <div className="text-xs font-medium">{item.subject}</div>
+              <div className="text-xs font-medium line-clamp-1">
+                {item.subject}
+              </div>
             </div>
-            <div className="text-wrap line-clamp-2 text-xs text-muted-foreground overflow-hidden text-ellipsis">
-              {item.text}
+            <div className="text-xs text-wrap text-muted-foreground break-words">
+              {/*item.text.substring(0, 300)*/ item.summary}
             </div>
             {item.labels.length ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 {item.labels.map((label) => (
                   <Badge key={label} variant={getBadgeVariantFromLabel(label)}>
                     {label}
