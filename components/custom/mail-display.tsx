@@ -24,7 +24,13 @@ import { Separator } from "../ui/separator";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { Mail } from "../data";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
+import { Mail } from "@/hooks/use-mail";
 
 interface MailDisplayProps {
   mail: Mail | null;
@@ -35,10 +41,11 @@ export function MailDisplay({ mail }: MailDisplayProps) {
     return <div>Mail not found</div>;
   }
   const today = new Date();
+  console.log(mail);
 
   return (
     <div className="flex min-h-screen flex-col">
-      <div className="flex items-center p-2">
+      {/*<div className="flex items-center p-2">
         <div className="flex items-center gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -120,14 +127,14 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                     </Button>
                   </div>
                 </div>
-                <div className="p-2">{/*<Calendar />*/}</div>
-              </PopoverContent>
-            </Popover>
-            <TooltipContent>Snooze</TooltipContent>
-          </Tooltip>
-        </div>
+                <div className="p-2"><Calendar /></div>
+              </PopoverContent >
+            </Popover >
+    <TooltipContent>Snooze</TooltipContent>
+          </Tooltip >
+        </div >
         <div className="ml-auto flex items-center gap-2">
-          <Tooltip>
+          {/*<Tooltip>
             <TooltipTrigger asChild>
               <Button variant="ghost" size="icon" disabled={!mail}>
                 <Reply className="h-4 w-4" />
@@ -170,7 +177,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
             <DropdownMenuItem>Mute thread</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div >*/}
       <Separator />
       {mail ? (
         <div className="flex flex-1 flex-col">
@@ -203,9 +210,30 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           </div>
           <Separator />
           <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
-            {mail.text}
+            <Accordion type="single" defaultValue="0">
+              <AccordionItem value="0">
+                <AccordionTrigger className="font-bold">
+                  Summary
+                </AccordionTrigger>
+                <AccordionContent asChild>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mail?.summary || "No mail found",
+                    }}
+                  ></div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="1">
+                <AccordionTrigger className="font-bold">
+                  Original Message
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div dangerouslySetInnerHTML={{ __html: mail.text }}></div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </div>
-          <Separator className="mt-auto" />
+          {/*<Separator className="mt-auto" />
           <div className="p-4 flex-1 h-fit">
             <form>
               <div className="grid gap-4">
@@ -231,7 +259,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                 </div>
               </div>
             </form>
-          </div>
+          </div>*/}
         </div>
       ) : (
         <div className="p-8 text-center text-muted-foreground">

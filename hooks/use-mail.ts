@@ -9,7 +9,7 @@ export interface Mail {
   date: string;
   read: boolean;
   labels: string[];
-  summary: string;
+  summary?: string;
   tags: string[];
 }
 

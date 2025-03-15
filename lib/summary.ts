@@ -47,27 +47,26 @@ const model = genAi.getGenerativeModel({ model: "gemini-1.5-flash" });
 export async function summarizeEmail(email: string) {
   if (email) {
     const prompt = `You are an AI email summarizer. Your task is to process an email, which may be in text or HTML format, and return a structured JSON output. The email may contain images, links, or attachments, and your summary should focus on the key content while ignoring unnecessary elements.
-
 Guidelines:
-
 Extract the core message of the email and generate a concise summary (minimum 50 words).
 If the email includes important images, links, or attachments, briefly mention their purpose. Ignore decorative images and repetitive signatures.
 Categorize the email content by assigning tags (e.g., "work", "personal", "finance", "urgent", "health", etc.).
 Don't use markdown to format the output, simply return a JSON object with the "summary" and "tags" fields.
 Ensure the response is in valid JSON format with the following structure:
-
 {
 "summary": "A clear and concise summary of the email, ensuring at least 50 words.",
 "tags": ["relevant", "email", "categories"]
 }
-
 So, please summarize the following email: ${email}
 `;
     const result = await model.generateContent(prompt);
     const res = result.response.candidates[0].content.parts[0].text;
     if (res) {
       const ans = res.match(/"(.*?)"/g)!;
-      return { summary: ans[1], tags: ans.splice(4) };
+      return {
+        summary: ans[1].replace(/"/g, ""),
+        tags: ans.splice(4),
+      };
     }
   }
   return { summary: "Cannot generate summary" };

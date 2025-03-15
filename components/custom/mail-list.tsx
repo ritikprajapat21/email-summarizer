@@ -27,9 +27,9 @@ export function MailList({ items }: MailListProps) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="font-semibold">{item.name}</div>
-                  {!item.read && (
+                  {/*!item.read && (
                     <span className="flex h-2 w-2 rounded-full bg-blue-600" />
-                  )}
+                  )*/}
                 </div>
                 <div className={cn("ml-auto text-xs text-muted-foreground")}>
                   {formatDistanceToNow(new Date(item.date), {
@@ -46,9 +46,11 @@ export function MailList({ items }: MailListProps) {
             </div>
             {item.labels.length ? (
               <div className="flex items-center gap-2 flex-wrap">
-                {item.labels.map((label) => (
+                {item?.tags.map((label) => (
                   <Badge key={label} variant={getBadgeVariantFromLabel(label)}>
-                    {label}
+                    <p className="capitalize">
+                      {label.toString().replaceAll('"', "")}
+                    </p>
                   </Badge>
                 ))}
               </div>
