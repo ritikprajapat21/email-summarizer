@@ -1,29 +1,29 @@
-import { addDays } from "date-fns/addDays";
-import { addHours } from "date-fns/addHours";
+// import { addDays } from "date-fns/addDays";
+// import { addHours } from "date-fns/addHours";
 import { format } from "date-fns/format";
-import { nextSaturday } from "date-fns/nextSaturday";
-import {
-  Archive,
-  ArchiveX,
-  Clock,
-  Forward,
-  MoreVertical,
-  Reply,
-  ReplyAll,
-  Trash2,
-} from "lucide-react";
-
-import { DropdownMenuContent, DropdownMenuItem } from "../ui/dropdown-menu";
+// import { nextSaturday } from "date-fns/nextSaturday";
+// import {
+//   Archive,
+//   ArchiveX,
+//   Clock,
+//   Forward,
+//   MoreVertical,
+//   Reply,
+//   ReplyAll,
+//   Trash2,
+// } from "lucide-react";
+//
+// import { DropdownMenuContent, DropdownMenuItem } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
-//import { Calendar } from "@/registry/new-york/ui/calendar";
-import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Label } from "../ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+// import { Button } from "../ui/button";
+// //import { Calendar } from "@/registry/new-york/ui/calendar";
+// import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
+// import { Label } from "../ui/label";
+// import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "../ui/separator";
-import { Switch } from "../ui/switch";
-import { Textarea } from "../ui/textarea";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+// import { Switch } from "../ui/switch";
+// import { Textarea } from "../ui/textarea";
+// import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import {
   Accordion,
   AccordionContent,
@@ -40,8 +40,8 @@ export function MailDisplay({ mail }: MailDisplayProps) {
   if (!mail) {
     return <div>Mail not found</div>;
   }
-  const today = new Date();
-  console.log(mail);
+  // const today = new Date();
+  console.log(mail.text);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -220,7 +220,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                     dangerouslySetInnerHTML={{
                       __html: mail?.summary || "No mail found",
                     }}
-                  ></div>
+                  />
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="1">
@@ -228,7 +228,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                   Original Message
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div dangerouslySetInnerHTML={{ __html: mail.text }}></div>
+                  <div dangerouslySetInnerHTML={{ __html: mail.text }} />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

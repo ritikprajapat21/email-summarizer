@@ -46,7 +46,7 @@ const model = genAi.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export async function summarizeEmail(email: string) {
   if (email) {
-    const prompt = `You are an AI email summarizer. Your task is to process an email, which may be in text or HTML format, and return a structured JSON output. The email may contain images, links, or attachments, and your summary should focus on the key content while ignoring unnecessary elements.
+    const prompt = `You are an email summarizer. Your task is to process an email, which may be in text or HTML format, and return a structured JSON output. The email may contain images, links, or attachments, and your summary should focus on the key content while ignoring unnecessary elements.
 Guidelines:
 Extract the core message of the email and generate a concise summary (minimum 50 words).
 If the email includes important images, links, or attachments, briefly mention their purpose. Ignore decorative images and repetitive signatures.

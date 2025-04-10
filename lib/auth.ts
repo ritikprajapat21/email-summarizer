@@ -12,7 +12,6 @@ export const oauthClient = async () =>
 
 export const logout = async () => {
   const cookieStore = await cookies();
-  console.log("Logging out");
   cookieStore.delete("access_token");
   redirect("/");
 };

@@ -1,24 +1,27 @@
 "use client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Separator } from "../ui/separator";
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import { useMail, Mail as MailType } from "@/hooks/use-mail";
 import { MailList } from "./mail-list";
-import { useEffect } from "react";
+import { useActionState, useEffect } from "react";
+import { logout } from "@/lib/auth";
+import { Button } from "../ui/button";
 
 export default function Mail({ mails }: { mails: MailType[] }) {
   const setMails = useMail((state) => state.setMails);
+  const [_, logoutAction, isPending] = useActionState(logout, null);
 
   useEffect(() => {
     setMails(mails);
   }, [mails]);
 
   return (
-    <Tabs defaultValue="all">
+    <div>
       <div className="flex items-center px-4 py-2">
         <h1 className="text-xl font-bold">Inbox</h1>
-        <TabsList className="ml-auto">
+        {/*<TabsList className="ml-auto">
           <TabsTrigger value="all" className="text-zinc-600 dark:text-zinc-200">
             All mail
           </TabsTrigger>
@@ -28,7 +31,10 @@ export default function Mail({ mails }: { mails: MailType[] }) {
           >
             Unread
           </TabsTrigger>
-        </TabsList>
+        </TabsList>*/}
+        <form action={logoutAction} className="ml-auto">
+          <Button disabled={isPending}>Logout</Button>
+        </form>
       </div>
       <Separator />
       <div className="bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -39,12 +45,13 @@ export default function Mail({ mails }: { mails: MailType[] }) {
           </div>
         </form>
       </div>
-      <TabsContent value="all" className="m-0">
-        <MailList items={mails} />
-      </TabsContent>
-      <TabsContent value="unread" className="m-0">
-        <MailList items={mails.filter((item) => !item.read)} />
-      </TabsContent>
-    </Tabs>
+      <MailList items={mails} />
+      {/* <TabsContent value="all" className="m-0"> */}
+      {/*   <MailList items={mails} /> */}
+      {/* </TabsContent> */}
+      {/* <TabsContent value="unread" className="m-0"> */}
+      {/*   <MailList items={mails.filter((item) => !item.read)} /> */}
+      {/* </TabsContent> */}
+    </div>
   );
 }

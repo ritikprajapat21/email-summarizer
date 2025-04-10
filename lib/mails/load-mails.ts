@@ -1,8 +1,10 @@
 "use server";
-import { google } from "googleapis";
+import { google } from "googleapis"; // Keep google import
+import type { gmail_v1 } from "googleapis"; // Use import type
 import { cookies } from "next/headers";
 import { logout, oauthClient } from "../auth";
 import { summarizeEmail } from "../summary";
+import type { GaxiosPromise } from "gaxios"; // Use import type
 
 export async function loadMails() {
   const gmail = google.gmail("v1");
@@ -29,15 +31,23 @@ export async function loadMails() {
       !res.data.messages ||
       res.data.messages.length === 0
     ) {
-      return []; // Return empty string if no messages
+      return []; // Return empty array if no messages
     }
 
-    const messageIds = res.data.messages.map((message) => message.id); // Extract IDs
+    // Ensure messageIds are valid strings before proceeding
+    const messageIds = res.data.messages
+        .map((message) => message.id)
+        .filter((id): id is string => typeof id === 'string'); // Filter out null/undefined IDs
 
-    const messagePromises = messageIds.map((id) => {
+    if (messageIds.length === 0) {
+        return []; // Return empty if no valid message IDs found
+    }
+
+    const messagePromises: GaxiosPromise<gmail_v1.Schema$Message>[] = messageIds.map((id) => {
+      // Type the promise array explicitly
       return gmail.users.messages.get({
         userId: "me",
-        id: id,
+        id: id, // Now guaranteed to be a string
         auth: oauth,
       });
     });
@@ -50,83 +60,100 @@ export async function loadMails() {
     // headers[25] -> To
     // headers[19] -> Subject => subject
     // headers[18] -> Message-ID => id
-    // decodedBody => text
-
-    const mailPromises = messageDetails.map((msgDetails) =>
-      getMailDetails(msgDetails),
+    // Process details (extract headers, decode body) - Now faster as summarizeEmail is removed
+    // Await the resolution of promises from getMailDetails
+    const processedMailPromises = messageDetails.map((msgDetails) =>
+      getMailDetails(msgDetails.data), // Pass msgDetails.data directly
     );
+    const resolvedMails = await Promise.all(processedMailPromises);
 
-    const allMailContent = await Promise.all(mailPromises);
+    // Filter out any null results from getMailDetails
+    const validProcessedMails = resolvedMails.filter((mail): mail is MailDetails => mail !== null);
+
+    // Summarize emails concurrently
+    const summaryPromises = validProcessedMails.map(mail =>
+        summarizeEmail(mail.text) // mail is guaranteed to be MailDetails here, so mail.text is safe
+    );
+    const summaries = await Promise.all(summaryPromises);
+
+    // Combine details with summaries
+    const allMailContent = validProcessedMails.map((mail, index) => ({
+      ...mail,
+      ...(summaries[index] || {}), // Merge summary results, handle potential null summary
+    }));
 
     // console.log(allMailContent);
     return allMailContent;
-  } catch (error: any) {
+  } catch (error: unknown) { // Use unknown for better type safety
     console.error("Error fetching emails:", error);
-    console.log(error.error);
-    if (error?.code === 401) {
+    // Type check before accessing properties
+    if (typeof error === 'object' && error !== null && 'code' in error && error.code === 401) {
       logout();
     }
     return [];
   }
 }
 
-async function getMailDetails(messageDetail: { data: any }) {
-  if (!messageDetail || !messageDetail.data) {
-    return "";
+// Type for the object returned by getMailDetails (before summarization)
+type MailDetails = {
+  id: string;
+  labels: string[];
+  read: boolean;
+  date?: string;
+  email?: string;
+  subject?: string;
+  text: string; // Body text
+};
+
+// Use gmail_v1.Schema$Message for better type safety
+async function getMailDetails(messageData: gmail_v1.Schema$Message): Promise<MailDetails | null> {
+  if (!messageData || !messageData.id) {
+    return null;
   }
 
-  const obj: any = {};
+  const obj: Partial<MailDetails> = { // Initialize with defaults
+      id: messageData.id, // ID is guaranteed by the check above
+      read: true,
+      labels: [],
+  };
 
-  obj.id = messageDetail.data.id;
-
-  if (messageDetail.data.labelIds) {
-    obj.labels = messageDetail.data.labelIds;
-    if (messageDetail.data.labelIds.includes("UNREAD")) {
+  if (messageData.labelIds) {
+    obj.labels = messageData.labelIds;
+    if (messageData.labelIds.includes("UNREAD")) {
       obj.read = false;
-    } else {
-      obj.read = true;
     }
   }
 
-  if (messageDetail.data.payload.headers) {
-    messageDetail.data.payload.headers.forEach(
-      (header: { name: string; value: string | number | Date }) => {
-        if (header.name === "Date") {
-          obj.date = new Date(header.value).toISOString();
-        } else if (header.name === "From") {
-          obj.email = header.value;
-        } else if (header.name === "Subject") {
-          obj.subject = header.value;
-        }
-      },
-    );
-  }
-
-  const messageData = messageDetail.data;
-  let decodedBody = "";
-
-  if (messageData.payload && messageData.payload.parts) {
-    messageData.payload.parts.forEach((part:any) => {
-      //if (part.mimeType === "text/plain") {
-      const data = part.body.data;
-      if (data) {
-        decodedBody += Buffer.from(data, "base64").toString();
+  // Use for...of loop and ensure header.value is string for email/subject
+  if (messageData.payload?.headers) {
+    for (const header of messageData.payload.headers) {
+      if (header.name === "Date" && header.value) {
+        // Ensure value exists before creating Date
+        obj.date = new Date(header.value).toISOString();
+      } else if (header.name === "From" && header.value) {
+        obj.email = String(header.value); // Convert to string explicitly
+      } else if (header.name === "Subject" && header.value) {
+        obj.subject = String(header.value); // Convert to string explicitly
       }
-      //}
-    });
-  } else if (
-    messageData.payload &&
-    messageData.payload.body &&
-    messageData.payload.body.data
-  ) {
-    const data = messageData.payload.body.data;
-    if (data) {
-      decodedBody = Buffer.from(data, "base64").toString();
     }
   }
 
-  const summary = await summarizeEmail(decodedBody);
-  // console.log(summary);
+  // Use optional chaining and for...of loop for parts
+  let decodedBody = "";
+  if (messageData.payload?.parts) {
+    for (const part of messageData.payload.parts) {
+      // Use optional chaining for part.body?.data
+      const data = part.body?.data;
+      if (data) {
+        decodedBody += Buffer.from(data, "base64").toString("utf-8"); // Specify encoding
+      }
+    }
+  } else if (messageData.payload?.body?.data) { // Use optional chaining
+    const data = messageData.payload.body.data;
+    decodedBody = Buffer.from(data, "base64").toString("utf-8"); // Specify encoding
+  }
 
-  return { ...obj, text: decodedBody, ...summary };
+  // Remove summarization from this function
+  // return { ...obj, text: decodedBody, ...summary };
+  return { ...(obj as MailDetails), text: decodedBody }; // Assert final type
 }
