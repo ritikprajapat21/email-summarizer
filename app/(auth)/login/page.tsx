@@ -4,13 +4,22 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Mail } from "lucide-react";
 
-export default async function LoginPage() {
+interface LoginPageProps {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
   const SCOPE = ["https://www.googleapis.com/auth/gmail.readonly"];
+  const destinationUrl = searchParams?.dest || "/mails"; // Default to /mails if dest is not present
 
   const oauth = await oauthClient();
+  // Encode the destination URL in the state parameter
+  const state = Buffer.from(JSON.stringify({ dest: destinationUrl })).toString('base64');
+
   const authUrl = oauth.generateAuthUrl({
     access_type: "offline",
     scope: SCOPE,
+    state: state, // Pass the encoded state
   });
 
   return (
@@ -51,23 +60,6 @@ export default async function LoginPage() {
             <span className="font-medium">Continue with Google</span>
           </Button>
         </Link>
-
-        {/*<div className="text-center text-sm text-muted-foreground">
-          By continuing, you agree to our{" "}
-          <Link
-            href="/terms"
-            className="underline underline-offset-4 hover:text-primary"
-          >
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link
-            href="/privacy"
-            className="underline underline-offset-4 hover:text-primary"
-          >
-            Privacy Policy
-          </Link>
-        </div>*/}
       </Card>
     </div>
   );

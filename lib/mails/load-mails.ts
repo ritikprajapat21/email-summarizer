@@ -58,7 +58,7 @@ export async function loadMails() {
 
     const allMailContent = await Promise.all(mailPromises);
 
-    console.log(allMailContent);
+    // console.log(allMailContent);
     return allMailContent;
   } catch (error: any) {
     console.error("Error fetching emails:", error);
@@ -106,7 +106,7 @@ async function getMailDetails(messageDetail: { data: any }) {
   let decodedBody = "";
 
   if (messageData.payload && messageData.payload.parts) {
-    messageData.payload.parts.forEach((part) => {
+    messageData.payload.parts.forEach((part:any) => {
       //if (part.mimeType === "text/plain") {
       const data = part.body.data;
       if (data) {
@@ -126,7 +126,7 @@ async function getMailDetails(messageDetail: { data: any }) {
   }
 
   const summary = await summarizeEmail(decodedBody);
-  console.log(summary);
+  // console.log(summary);
 
   return { ...obj, text: decodedBody, ...summary };
 }
