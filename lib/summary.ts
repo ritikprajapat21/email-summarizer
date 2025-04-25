@@ -63,6 +63,7 @@ So, please summarize the following email: ${email}
     const res = result.response.candidates[0].content.parts[0].text;
     if (res) {
       const ans = res.match(/"(.*?)"/g)!;
+      console.log("Tags", ans);
       return {
         summary: ans[1].replace(/"/g, ""),
         tags: ans.splice(4),

@@ -44,7 +44,7 @@ export function MailList({ items }: MailListProps) {
             <div className="text-xs text-wrap text-muted-foreground break-words">
               {/*item.text.substring(0, 300)*/ item.summary}
             </div>
-            {item.labels.length ? (
+            {item.tags && item.tags.length ? (
               <div className="flex items-center gap-2 flex-wrap">
                 {item?.tags.map((label) => (
                   <Badge key={label} variant={getBadgeVariantFromLabel(label)}>

@@ -8,5 +8,7 @@ export default async function Home() {
     return <p>Try again.</p>;
   }
 
+  console.log(mails);
+
   return <Mail mails={mails} />;
 }
