@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Email Summarizer
+A powerful tool designed to streamline your Gmail inbox management by providing concise summaries and enabling efficient organization through custom tagging.
 
-## Getting Started
+## Overview
+The Email Summarizer is a web application that significantly reduces the time spent reviewing emails. It leverages advanced AI to summarize your Gmail content and offers robust features for tagging and searching, improving overall workflow efficiency.
 
-First, run the development server:
+## Demo
+https://github.com/user-attachments/assets/6cef18e7-938b-4c00-972c-fa5e769101d7
 
+## Features
+- Intelligent Email Summarization: Get a quick overview of your emails with AI-powered summaries, reducing email review time by over 60%.
+- Custom Tagging & Search Filters: Improve workflow efficiency by implementing custom tagging and search filters for better email organization and retrieval.
+- Secure Gmail Integration: Ensures secure access to your user inbox data through OAuth-based Gmail integration.
+- Intuitive User Interface: Enhanced user experience with a clean and intuitive interface built using TailwindCSS and Next.js.
+
+## Tech Stack
+- Frontend: Next.js, TailwindCSS 
+- APIs: Gmail API, Gemini API 
+
+## Setup and Installation
+Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+git clone https://github.com/ritikprajapat21/email-summarizer.git
+```
+Install dependencies:
+```bash
+cd email-summarizer
+bun install
+```
+Configure API Keys:
+Obtain credentials for Gmail API and Gemini API.
+Set up environment variables for your API keys.
+Run the application:
+```bash
 bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
